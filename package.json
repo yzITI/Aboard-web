@@ -8,10 +8,13 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
+    "micromark": "^3.0.10",
+    "micromark-extension-math": "^2.0.2",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.2",
     "@vitejs/plugin-vue": "^2.3.1",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",
