@@ -4,7 +4,7 @@ import { micromark } from 'micromark'
 import { math, mathHtml } from 'micromark-extension-math'
 import { draft, receiver } from '../plugins/state.js'
 const { type } = defineProps(['type'])
-let md = $ref(micromark(type == 'draft' ? draft.value : receiver.value, { extensions: [math()], htmlExtensions: [mathHtml()] }))
+let md = $ref(micromark(type == 'draft' ? draft.value : receiver.value.content, { extensions: [math()], htmlExtensions: [mathHtml()] }))
 
 watch(draft, () => {
   md = micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] })

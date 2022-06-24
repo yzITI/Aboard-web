@@ -1,10 +1,12 @@
 <script setup>
-import { draft } from '../plugins/state.js'
+import { draft, receiver } from '../plugins/state.js'
 import Markdown from '../components/Markdown.vue'
 import { useRoute } from 'vue-router'
 import { BookOpenIcon, CheckIcon, ChatAltIcon, XIcon } from "@heroicons/vue/solid"
 const route = useRoute()
-const topic = route.params.id
+const r = route.params.receiver.split('$')
+
+receiver.value = { type: r[0], id: r[1], content: '## test' }
 
 let title = $ref('')
 let showPreview = $ref(false)
@@ -12,7 +14,9 @@ let showReceiver = $ref(false)
 
 const isWide = window.innerWidth > 1024
 
-let receiver = $ref('## test')
+async function post () {
+
+}
 
 </script>
 
@@ -39,7 +43,7 @@ let receiver = $ref('## test')
     <input v-if="topic == 'topic'" v-model="title" placeholder="在这里输入标题">
     <div class="flex items-center" v-else>
       回复:
-      <div class="ml-1 font-mono bg-gray-100 p-1 text-gray-400">讨论{{ topic }}</div>
+      <div class="ml-1 font-mono bg-gray-100 p-1 text-gray-400">{{ receiver.type }} {{ receiver.id }}</div>
     </div>
     <span class="flex bg-green-400 text-white rounded-sm p-1 items-center cursor-pointer"><check-icon class="w-6"/>发布</span>
   </footer>
