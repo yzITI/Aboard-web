@@ -1,9 +1,10 @@
 <script setup>
-import { watch } from 'vue'
+import { defineProps, watch } from 'vue'
 import { micromark } from 'micromark'
 import { math, mathHtml } from 'micromark-extension-math'
-import { draft } from '../plugins/state.js'
-let md = $ref(micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] }))
+import { draft, receiver } from '../plugins/state.js'
+const { type } = defineProps(['type'])
+let md = $ref(micromark(type == 'draft' ? draft.value : receiver.value, { extensions: [math()], htmlExtensions: [mathHtml()] }))
 
 watch(draft, () => {
   md = micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] })
