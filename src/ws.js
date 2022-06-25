@@ -1,4 +1,4 @@
-import { reactive } from "vue"
+import { reactive, shallowReadonly } from "vue"
 import { topicList } from './plugins/state.js'
 
 const ws = {
@@ -23,7 +23,7 @@ const ws = {
 
 function ack (e) {
   const { d, i } = JSON.parse(e.data)
-  console.log(d)
+  // TODO: update list based on different situation
   if (i === 'list') {
     topicList.push(...d)
   }
@@ -32,10 +32,6 @@ function ack (e) {
 
 function eventData (o, i, d = {}) {
   ws.send(JSON.stringify({ o, i, d }))
-  ws.send(JSON.stringify({ o: 'topic.create', i: 'create', d: { title: 'test1', content: '# some test content'} }))
-  ws.send(JSON.stringify({ o: 'topic.create', i: 'create2', d: { title: 'test2', content: '# some test content'} }))
-  ws.send(JSON.stringify({ o: 'topic.create', i: 'create3', d: { title: 'test3', content: '# some test content'} }))
-  ws.send(JSON.stringify({ o: 'topic.create', i: 'create4', d: { title: 'test44444444444444', content: '# some test content'} }))
 }
 
 function waitForConnection (callback, interval) {

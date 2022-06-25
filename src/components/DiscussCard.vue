@@ -8,6 +8,9 @@
 <script setup>
 import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { topic } from '../plugins/state'
+
 const tzoffset = (new Date()).getTimezoneOffset() * 60000
 const { info } = defineProps(['info'])
 const router = useRouter()
@@ -20,6 +23,7 @@ const parseDate = (timestamp) => {
   return date + ' ' + time
 }
 const detail = (id) => {
+  topic.value = info
   router.push('/discuss/' + id)
 }
 </script>

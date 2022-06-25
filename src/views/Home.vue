@@ -6,10 +6,10 @@
         <pencil-icon class="h-8 w-8 text-blue-500" />
       </button>
       <discuss-card v-for="n in topicList" :key="n._id" :info="n" />
-      <infinite-loading :identifier="LS.getItem('name')" @infinite="load">
+      <!-- <infinite-loading :identifier="LS.getItem('name')" @infinite="load">
         <template v-slot:no-more>没有更多内容啦！</template>
         <template v-slot:no-results>暂时还没有内容呢</template>
-      </infinite-loading>
+      </infinite-loading> -->
     </div>
   </div>
 </template>
@@ -26,6 +26,14 @@ import { topicList } from '../plugins/state'
 const LS = window.localStorage
 const router = useRouter()
 
+if (!ws.ws.url) {
+  Swal.fire('您还未登录', '', 'error')
+    .then(() => router.push('/login'))
+}
+
+function write () {
+  router.push('/discuss/new')
+}
 async function load ($state) {
   // TODO
   return
