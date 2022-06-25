@@ -25,7 +25,7 @@ const isWide = window.innerWidth > 1024
     <markdown v-if="showPreview" class="h-screen w-1/2 p-16 overflow-y-auto grow"></markdown>
     <textarea v-else class="h-screen w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="draft"/>
   </div>
-  <footer class="flex items-center justify-between p-2 absolute bottom-0 h-12 border border-2 border-gray-100 bg-white shadow-lg w-screen">
+  <footer class="flex items-center justify-between p-2 absolute bottom-0 h-12 border-2 border-gray-100 bg-white shadow-lg w-screen">
     <input v-if="topic == 'topic'" v-model="title" placeholder="在这里输入标题">
     <div class="flex items-center" v-else>
       回复:

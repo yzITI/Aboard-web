@@ -1,12 +1,11 @@
 <script setup>
 import { watch } from 'vue'
 import { micromark } from 'micromark'
-import { math, mathHtml } from 'micromark-extension-math'
 import { draft } from '../plugins/state.js'
-let md = $ref(micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] }))
+let md = $ref(micromark(draft.value))
 
 watch(draft, () => {
-  md = micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] })
+  md = micromark(draft.value)
 })
 
 </script>
