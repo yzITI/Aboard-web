@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue'
+import { defineProps, watch } from 'vue'
 import { micromark } from 'micromark'
 import { draft } from '../plugins/state.js'
 let md = $ref(micromark(draft.value))
