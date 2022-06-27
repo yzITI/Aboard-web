@@ -20,8 +20,7 @@ if (!isNew && !state.block) {
 }
 let showPreview = $ref(false)
 let showReceiver = $ref(false)
-
-const isWide = $ref(false)
+let isWide = $ref(window.innerWidth > 1024)
 window.addEventListener('resize', () => isWide = window.innerWidth > 1024)
 
 function initBlock () {
@@ -51,12 +50,12 @@ onUnmounted(() => window.removeEventListener('resize', () => isWide = window.inn
 <template>
   <bar />
   <span class="flex items-center absolute right-4 mt-2">
-    <div class="tooltipPreview">
-      <book-open-icon v-if="!isWide" class="w-8 cursor-pointer mr-2" :class="showPreview ? 'text-sky-400' : 'text-gray-400'" @click="showPreview = !showPreview" />
+    <div v-if="!isWide" class="tooltipPreview">
+      <book-open-icon class="w-8 cursor-pointer mr-2" :class="showPreview ? 'text-sky-400' : 'text-gray-400'" @click="showPreview = !showPreview" />
       <span class="tooltipTextPreview w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">预览</span>
     </div>
     <div class="tooltipCheck">
-      <check-icon v-if="!isWide" class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="post" />
+      <check-icon class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="post" />
       <span class="tooltipTextCheck w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">提交</span>
     </div>
     <chat-alt-icon v-if="!isNew" class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
