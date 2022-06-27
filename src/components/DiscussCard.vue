@@ -1,7 +1,7 @@
 <template>
   <div class="rounded-lg bg-slate-50 m-2 cursor-pointer p-1 transition-all ease-in-out duration-300 hover:scale-x-105" @click="detail(info._id)">
-    <h1 class="subtitle m-2"><b>{{ info.title }}</b></h1>
-    <p class="p-2" style="color: #757575;">{{ info.username }} &#8287; {{parseDate(info.time) }}</p>
+    <h1 class="subtitle m-2"><b>{{ info.surface.title }}</b></h1>
+    <p class="p-2" style="color: #757575;">{{ info.surface.author }} &#8287; {{parseDate(info.time) }}</p>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { topic } from '../plugins/state'
+import { state } from '../state'
 
 const tzoffset = (new Date()).getTimezoneOffset() * 60000
 const { info } = defineProps(['info'])
@@ -23,7 +23,7 @@ const parseDate = (timestamp) => {
   return date + ' ' + time
 }
 const detail = (id) => {
-  topic.value = info
+  state.block = info
   router.push('/discuss/' + id)
 }
 </script>

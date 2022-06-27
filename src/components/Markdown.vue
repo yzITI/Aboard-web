@@ -1,11 +1,11 @@
 <script setup>
-import { defineProps, watch } from 'vue'
+import { watch } from 'vue'
 import { micromark } from 'micromark'
-import { draft } from '../plugins/state.js'
-let md = $ref(micromark(draft.value))
+import { state } from '../state.js'
+let md = $ref(micromark(state.block?.volume.value))
 
-watch(draft, () => {
-  md = micromark(draft.value)
+watch(state.block.volume, () => {
+  md = micromark(state.block?.volume.value)
 })
 
 </script>

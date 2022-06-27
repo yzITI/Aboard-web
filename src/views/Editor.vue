@@ -4,42 +4,48 @@ import { BookOpenIcon, CheckIcon, ChatAltIcon, XIcon } from "@heroicons/vue/soli
 
 import Markdown from '../components/Markdown.vue'
 import Bar from '../components/Bar.vue'
-import { receiver, topic } from '../plugins/state.js'
-import ws from '../ws'
+import { state, send } from '../state'
+import { onUnmounted } from '@vue/runtime-core'
 
 const route = useRoute(), router = useRouter()
 const isNew = route.params.id === 'new'
-const r = route.params.id.split('$')
-
-if (!ws.ws.url) {
-  Swal.fire('您还未登录', '', 'error')
-    .then(() => router.push('/login'))
-}
 
 if (isNew) {
-  initTopic
+  initBlock()
 }
 
-receiver.value = { type: r[0], id: r[1], content: '## test' }
-
+if (!isNew && !state.block) {
+  Swal.fire('讨论不存在', '', 'error')
+    .then(() => router.push('/'))
+}
 let showPreview = $ref(false)
 let showReceiver = $ref(false)
 
+const isWide = $ref(false)
+window.addEventListener('resize', () => isWide = window.innerWidth > 1024)
 
-const isWide = window.innerWidth > 1024
-
-function initTopic () {
-  topic.value = {
-    title: '',
-    content: ''
+function initBlock () {
+  state.block = {
+    user: 'test',
+    parent: '',
+    surface: { // all surface information
+      title: 'title',
+      type: 'block type',
+      author: 'display user name',
+      value: 'text or other kinds of value'
+    },
+    volume: { // longer content of block
+      value: '# Your editing starts here'
+    }
   }
 }
 async function post () {
-  ws.send(JSON.stringify({ o: 'topic.create', i: 'new', d: topic.value }))
-  initTopic()
+  send('block.put', state.block)
+  initBlock()
   router.push('/')
 }
 
+onUnmounted(() => window.removeEventListener('resize', () => isWide = window.innerWidth > 1024))
 </script>
 
 <template>
@@ -50,7 +56,7 @@ async function post () {
       <span class="tooltipTextPreview w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">预览</span>
     </div>
     <div class="tooltipCheck">
-      <check-icon v-if="!isWide" class="w-8 cursor-pointer mr-2" @click="post" />
+      <check-icon v-if="!isWide" class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="post" />
       <span class="tooltipTextCheck w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">提交</span>
     </div>
     <chat-alt-icon v-if="!isNew" class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
@@ -62,12 +68,12 @@ async function post () {
     </div>
   </div>
   <div v-if="isWide" class="flex w-screen">
-    <textarea class="h-screen w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="topic.content"/>
-    <markdown class="h-screen w-1/2 p-16 overflow-y-auto" type="draft"></markdown>
+    <textarea class="h-screen w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="state.block.volume.value"/>
+    <markdown class="h-screen w-1/2 p-16 overflow-y-auto bg-gray-100" type="draft"></markdown>
   </div>
   <div v-else class="flex w-screen">
     <markdown v-if="showPreview" class="h-screen w-1/2 p-16 overflow-y-auto" type="draft"></markdown>
-    <textarea v-else class="h-screen w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="topic.content"/>
+    <textarea v-else class="h-screen w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="state.block.volume.value"/>
   </div>
   <footer class="flex z-10 items-center justify-between p-2 absolute bottom-0 h-12 border-2 border-gray-100 bg-white shadow-lg w-screen" v-if="!isNew">
     <div class="flex items-center">

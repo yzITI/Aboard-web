@@ -5,7 +5,7 @@
       <button class="fixed bottom-8 right-8 w-16 h-16 z-50 flex flex-col justify-center items-center border-solid border-2 border-sky-500 rounded-full hover:scale-110 bg-slate-50" @click="write">
         <pencil-icon class="h-8 w-8 text-blue-500" />
       </button>
-      <discuss-card v-for="n in topicList" :key="n._id" :info="n" />
+      <discuss-card v-for="n in state.children" :key="n._id" :info="n" />
       <!-- <infinite-loading :identifier="LS.getItem('name')" @infinite="load">
         <template v-slot:no-more>没有更多内容啦！</template>
         <template v-slot:no-results>暂时还没有内容呢</template>
@@ -21,16 +21,14 @@ import DiscussCard from '../components/DiscussCard.vue'
 import Bar from '../components/Bar.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 
-import ws from '../ws'
-import { topicList } from '../plugins/state'
-const LS = window.localStorage
+import { send, state, auth } from '../state'
 const router = useRouter()
 
-if (!ws.ws.url) {
-  Swal.fire('您还未登录', '', 'error')
-    .then(() => router.push('/login'))
-}
-
+setTimeout(() => {
+  auth({})
+  send('block.get', '')
+  console.log(state)
+}, 2000); 
 function write () {
   router.push('/discuss/new')
 }
