@@ -1,3 +1,28 @@
+<script setup>
+import { useRouter } from 'vue-router'
+import { PencilIcon } from '@heroicons/vue/solid'
+import DiscussCard from '../components/DiscussCard.vue'
+import Bar from '../components/Bar.vue'
+import InfiniteLoading from 'vue-infinite-loading'
+
+import { send, state, auth } from '../state'
+const router = useRouter()
+
+setTimeout(() => {
+  if (!state.block._id) state.block._id = ''
+  auth({})
+  send('block.get', '')
+}, 2000); 
+
+function write () {
+  router.push('/discuss/new')
+}
+async function load ($state) {
+  // TODO
+  return
+}
+</script>
+
 <template>
   <div>
     <bar />
@@ -13,30 +38,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { useRouter } from 'vue-router'
-import { PencilIcon } from '@heroicons/vue/solid'
-import DiscussCard from '../components/DiscussCard.vue'
-import Bar from '../components/Bar.vue'
-import InfiniteLoading from 'vue-infinite-loading'
-
-import { send, state, auth } from '../state'
-const router = useRouter()
-
-setTimeout(() => {
-  auth({})
-  send('block.get', '')
-  console.log(state)
-}, 2000); 
-function write () {
-  router.push('/discuss/new')
-}
-async function load ($state) {
-  // TODO
-  return
-}
-</script>
 
 <style scoped>
 .list {

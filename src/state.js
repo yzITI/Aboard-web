@@ -19,13 +19,15 @@ export function auth (jwt) {
 
 ws.onmessage = e => {
   const data = JSON.parse(e.data), N = data.N, A = data.A || []
-  console.log(N)
-  if (N === 'auth') {
-    window.location.href = 'http://localhost:3000/#/'
+  if (N === 'block.error') {
+    console.log(A)
   }
-  if (N === 'block.one' && state.block._id == A[0]) state.block = A[1]
+  if (N === 'block.one' && state.block._id == A[0]._id) {
+    state.block = A[0]
+  }
   if (N === 'block.children' && state.block._id == A[0]) {
-    for (const id in A[1]) state.children[id] = A[1][id]
+    state.children = A[1]
+    // for (const id in A[1]) state.children[id] = A[1][id]
   }
   if (N === 'block.removeChildren' && state.block._id == A[0]) {
     for (const id in A[1]) delete state.children[id]

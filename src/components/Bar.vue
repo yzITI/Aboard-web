@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between m-0 rounded-b-lg bar">
+  <div class="flex items-center justify-between m-0 rounded-b-lg bar border">
     <div class="flex items-center justify-center">
       <home-icon class="m-2 h-8 w-8 text-grey-500 cursor-pointer" @click="home" />
       <h1 class="text-xl p-2 rounded-lg inline-block">Aboard</h1>
