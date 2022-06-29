@@ -11,7 +11,6 @@ import { onUnmounted } from '@vue/runtime-core'
 const route = useRoute(), router = useRouter()
 const id = route.params.id
 const isNew = id === 'new'
-const comment = $ref('')
 
 
 initDraft()
@@ -26,7 +25,6 @@ let isWide = $ref(window.innerWidth > 1024)
 window.addEventListener('resize', () => isWide = window.innerWidth > 1024)
 
 function initDraft () {
-  if (draft.block.volume.value != 'Loading contents...') return
   draft.block = {
     user: 'test',
     parent: isNew ? '' : id,
@@ -44,8 +42,8 @@ function initDraft () {
 
 function post () {
   send('block.put', draft.block)
-  initDraft()
-  router.push('/')
+  draft.block = {}
+  router.push(isNew ? '/' : '/discuss/' + id)
 }
 onUnmounted(() => window.removeEventListener('resize', () => isWide = window.innerWidth > 1024))
 </script>
