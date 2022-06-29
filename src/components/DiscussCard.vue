@@ -22,10 +22,10 @@ const parseDate = (timestamp) => {
   const time = s[1].substr(0, 8)
   return date + ' ' + time
 }
-console.log(info.surface)
 
 const detail = (id) => {
   state.block._id = id
+  state.children = {}
   send('block.get', id)
   router.push('/discuss/' + id)
 }

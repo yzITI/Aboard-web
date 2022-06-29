@@ -13,9 +13,11 @@ const id = route.params.id
 const isNew = id === 'new'
 const comment = $ref('')
 
-initBlock()
+
 if (isNew) {
   initBlock(false)
+} else {
+  initBlock()
 }
 
 if (!isNew && !state.block) {
@@ -84,8 +86,8 @@ onUnmounted(() => window.removeEventListener('resize', () => isWide = window.inn
       <check-icon class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="post" />
       <span class="tooltipTextCheck w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">提交</span>
     </div>
-    <div class="tooltipComment">
-      <chat-alt-icon v-if="!isNew" class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
+    <div class="tooltipComment" v-if="!isNew">
+      <chat-alt-icon class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
       <span class="tooltipTextComment w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">评论</span>
     </div>
   </span>

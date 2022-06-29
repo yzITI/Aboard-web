@@ -9,7 +9,7 @@ import { send, state, auth } from '../state'
 const router = useRouter()
 
 setTimeout(() => {
-  if (!state.block._id) state.block._id = ''
+  state.block._id = ''
   auth({})
   send('block.get', '')
 }, 2000); 
