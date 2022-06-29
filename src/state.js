@@ -6,6 +6,22 @@ export const state = reactive({
   children: {}
 })
 
+export const draft = reactive({
+  block: {
+    user: 'test',
+    parent: '',
+    surface: { // all surface information
+      title: 'Enter title here',
+      type: 'block type',
+      author: 'test',
+      value: 'text or other kinds of value'
+    },
+    volume: { // longer content of block
+      value: 'Loading contents...'
+    }
+  }
+})
+
 export default state
 
 const ws = new WebSocket(`ws://localhost:8080`)

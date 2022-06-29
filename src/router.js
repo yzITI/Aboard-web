@@ -2,7 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const index = {
   '/': () => import('./views/Home.vue'),
-  '/discuss/:id': () => import('./views/Editor.vue'),
+  '/post/:id': () => import('./views/Editor.vue'),
+  '/discuss/:id': () => import('./views/Discuss.vue'),
   '/login': () => import('./views/Login.vue')
 }
 

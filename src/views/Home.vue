@@ -15,7 +15,7 @@ setTimeout(() => {
 }, 2000); 
 
 function write () {
-  router.push('/discuss/new')
+  router.push('/post/new')
 }
 async function load ($state) {
   // TODO

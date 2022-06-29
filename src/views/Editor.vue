@@ -5,7 +5,7 @@ import { BookOpenIcon, CheckIcon, ChatAltIcon, XIcon } from "@heroicons/vue/soli
 import Markdown from '../components/Markdown.vue'
 import Bar from '../components/Bar.vue'
 import DiscussCard from '../components/DiscussCard.vue'
-import { state, send } from '../state'
+import { state, send, draft } from '../state'
 import { onUnmounted } from '@vue/runtime-core'
 
 const route = useRoute(), router = useRouter()
@@ -14,11 +14,7 @@ const isNew = id === 'new'
 const comment = $ref('')
 
 
-if (isNew) {
-  initBlock(false)
-} else {
-  initBlock()
-}
+initDraft()
 
 if (!isNew && !state.block) {
   Swal.fire('讨论不存在', '', 'error')
@@ -29,13 +25,13 @@ let showReceiver = $ref(false)
 let isWide = $ref(window.innerWidth > 1024)
 window.addEventListener('resize', () => isWide = window.innerWidth > 1024)
 
-function initBlock (loading = true) {
-  if (state.block.volume) return
-  state.block = {
+function initDraft () {
+  if (draft.block.volume.value != 'Loading contents...') return
+  draft.block = {
     user: 'test',
-    parent: '',
+    parent: isNew ? '' : id,
     surface: { // all surface information
-      title: 'Enter title here',
+      title: isNew ? 'Enter title here' : `${state.user}回复了${state.block.surface.author}`,
       type: 'block type',
       author: 'test',
       value: 'text or other kinds of value'
@@ -44,71 +40,47 @@ function initBlock (loading = true) {
       value: 'Loading contents...'
     }
   }
-  if (loading) {
-    state.block.surface.title = state.children[id].surface.title
-    state.block._id = id
-  }
 }
 
 function post () {
-  send('block.put', state.block)
-  initBlock()
+  send('block.put', draft.block)
+  initDraft()
   router.push('/')
-}
-
-function postComment () {
-  send('block.put', {
-    user: 'test',
-    parent: id,
-    surface: { // all surface information
-      title: `${state.user}回复了${state.block.surface.author}`,
-      type: 'comment',
-      author: 'test',
-      value: comment
-    },
-    volume: { // longer content of block
-      value: comment
-    }
-  })
-  showReceiver = false
 }
 onUnmounted(() => window.removeEventListener('resize', () => isWide = window.innerWidth > 1024))
 </script>
 
 <template>
   <bar />
-  <span class="flex items-center absolute right-4 mt-2">
+  <span class="flex items-center absolute right-2 mt-2">
     <div v-if="!isWide" class="tooltipPreview">
       <book-open-icon class="w-8 cursor-pointer mr-2" :class="showPreview ? 'text-sky-400' : 'text-gray-400'" @click="showPreview = !showPreview" />
       <span class="tooltipTextPreview w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">预览</span>
+    </div>
+    <div class="tooltipComment" v-if="!isNew">
+      <chat-alt-icon class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
+      <span class="tooltipTextComment w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">原帖</span>
     </div>
     <div class="tooltipCheck">
       <check-icon class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="post" />
       <span class="tooltipTextCheck w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">提交</span>
     </div>
-    <div class="tooltipComment" v-if="!isNew">
-      <chat-alt-icon class="w-8 cursor-pointer text-gray-400" @click="showReceiver = true"/>
-      <span class="tooltipTextComment w-min invisible z-10 py-2 px-3 text-sm font-medium rounded-lg shadow-sm text-white transition-opacity duration-300 dark:bg-gray-700">评论</span>
-    </div>
   </span>
-  <input placeholder="Enter you title here" class="p-2 m-1" v-model="state.block.surface.title"/>
-  <div v-if="showReceiver" class="absolute z-40 flex items-center justify-center h-5/6 w-screen bg-gray-600 opacity-75">
-    <div class="relative md:w-1/2 w-5/6 h-3/4" type="receiver">
-      <textarea class="w-full h-full bg-white rounded-md p-16 overflow-y-auto" v-model="comment"/>
-      <check-icon class="w-8 cursor-pointer mr-2 text-gray-400 hover:text-green-400" @click="postComment" />
+  <div v-if="showReceiver" class="absolute z-40 flex items-center justify-center h-screen w-screen bg-gray-600 opacity-75">
+    <div class="relative md:w-1/2 w-5/6 h-3/4">
+      <markdown :content="state.block.volume.value" class="h-full w-full bg-white rounded-lg p-16" />
       <span class="absolute right-4 top-4 cursor-pointer" @click="showReceiver = false"><x-icon class="w-6 text-black"/></span>
     </div>
   </div>
-  <div v-if="isWide" class="flex w-screen">
-    <textarea class="h-5/6 w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="state.block.volume.value"/>
-    <markdown class="h-5/6 w-1/2 p-16 overflow-y-auto bg-gray-100" type="draft"></markdown>
+  <input :disabled="!isNew" placeholder="Enter you title here" class="p-2 m-1" v-model="draft.block.surface.title"/>
+  <div v-if="isWide" class="flex w-screen h-screen">
+    <textarea class="h-full w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="draft.block.volume.value"/>
+    <markdown class="h-full w-1/2 p-16 overflow-y-auto bg-gray-100"></markdown>
   </div>
-  <div v-else class="flex w-screen">
-    <markdown v-if="showPreview" class="h-5/6 w-1/2 p-16 overflow-y-auto" type="draft"></markdown>
-    <textarea v-else class="h-5/6 w-1/2 overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="state.block.volume.value"/>
+  <div v-else class="flex w-screen h-screen">
+    <markdown v-if="showPreview" class="h-full w-full p-16 overflow-y-auto"></markdown>
+    <textarea v-else class="h-full w-full overflow-y-auto bg-gray-100 p-8 border grow resize-none font-mono font-bold" placeholder="在这里写作..." rows="20" v-model="draft.block.volume.value"/>
   </div>
-  <discuss-card v-for="n in state.children" :key="n._id" :info="n" />
-  <p v-if="state.children == {}" class="m-2">还没人发表评论，快来抢沙发吧～</p>
 </template>
 
 <style scoped>

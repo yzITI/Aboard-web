@@ -24,9 +24,6 @@ const parseDate = (timestamp) => {
 }
 
 const detail = (id) => {
-  state.block._id = id
-  state.children = {}
-  send('block.get', id)
   router.push('/discuss/' + id)
 }
 </script>
