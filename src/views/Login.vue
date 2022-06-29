@@ -1,13 +1,15 @@
 <script setup>
-import { auth } from '../state'
+import { watch } from 'vue'
+import { state, auth, goto } from '../state'
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
-const login = async () => {
-  auth({})
-}
 
-await login()
+auth('')
+
+watch(() => state.user, v => {
+  router.push('/')
+  goto('') // goto root
+})
 </script>
 
 <template>

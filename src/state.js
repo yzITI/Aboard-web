@@ -6,28 +6,12 @@ export const state = reactive({
   children: {}
 })
 
-export const draft = reactive({
-  block: {
-    user: 'test',
-    parent: '',
-    surface: { // all surface information
-      title: 'Enter title here',
-      type: 'block type',
-      author: 'test',
-      value: 'text or other kinds of value'
-    },
-    volume: { // longer content of block
-      value: 'Loading contents...'
-    }
-  }
-})
-
 export default state
 
 const ws = new WebSocket(`ws://localhost:8080`)
 ws.json = (N, ...A) => ws.send(JSON.stringify({ N, A }))
 
-export function auth (jwt) {
+export function auth (jwt, onauth) {
   const sendAuth = () => ws.json('auth', jwt)
   if (ws.readyState === 1) return sendAuth()
   ws.onopen = sendAuth
@@ -35,6 +19,7 @@ export function auth (jwt) {
 
 ws.onmessage = e => {
   const data = JSON.parse(e.data), N = data.N, A = data.A || []
+  if (N === 'auth') return state.user = A[0]
   if (N === 'block.error') {
     console.log(A)
   }
@@ -50,3 +35,9 @@ ws.onmessage = e => {
 }
 
 export const send = ws.json
+
+export function goto (_id) {
+  state.block = { _id }
+  state.children = {}
+  send('block.get', _id)
+}
