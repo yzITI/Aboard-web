@@ -1,18 +1,17 @@
 <script setup>
-import { watch } from 'vue'
+import { defineProps, watch } from 'vue'
 import { micromark } from 'micromark'
-import { math, mathHtml } from 'micromark-extension-math'
-import { draft } from '../plugins/state.js'
-let md = $ref(micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] }))
-
-watch(draft, () => {
-  md = micromark(draft.value, { extensions: [math()], htmlExtensions: [mathHtml()] })
+import { draft } from '../state.js'
+const { content } = defineProps(['content'])
+let md = $ref(micromark(content || draft.block.volume.value))
+watch(() => draft.block.volume.value, () => {
+  md = micromark(draft.block.volume.value)
 })
 
 </script>
 
 <template>
   <div>
-    <div class="prose lg:prose-xl" v-html="md"></div>
+    <div class="prose lg:prose-xl" v-html="md" />
   </div>
 </template>
