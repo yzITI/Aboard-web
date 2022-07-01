@@ -1,11 +1,13 @@
 import { defineAsyncComponent } from 'vue'
 
 const volumeIndex = {
-  List: () => import('./volumes/List.vue')
+  List: () => import('./volumes/List.vue'),
+  Post: () => import('./volumes/Post.vue')
 }
 
 const surfaceIndex = {
-  ListItem: () => import('./surfaces/ListItem.vue')
+  ListItem: () => import('./surfaces/ListItem.vue'),
+  Comment: () => import('./surfaces/Comment.vue')
 }
 
 export const volumes = {}

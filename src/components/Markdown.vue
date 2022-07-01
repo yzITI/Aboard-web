@@ -1,17 +1,9 @@
 <script setup>
-import { defineProps, watch } from 'vue'
 import { micromark } from 'micromark'
-import { draft } from '../state.js'
 const { content } = defineProps(['content'])
-let md = $ref(micromark(content || draft.block.volume.value))
-watch(() => draft.block.volume.value, () => {
-  md = micromark(draft.block.volume.value)
-})
-
+let md = $computed(() => micromark(content))
 </script>
 
 <template>
-  <div>
-    <div class="prose lg:prose-xl" v-html="md" />
-  </div>
+  <div class="prose" v-html="md" />
 </template>

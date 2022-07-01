@@ -5,10 +5,13 @@ import { state, auth, goto } from './state.js'
 import { volumes } from './blocks.js'
 
 // auth
-if (!state.user.id) window.open('https://cn.aauth.link/#/launch/aboard', 'aauth', 'width=400,height=800,top=50,left=50')
+const SS = window.sessionStorage
+if (!SS.token) window.open('https://cn.aauth.link/#/launch/aboard', 'aauth', 'width=400,height=800,top=50,left=50')
+else auth(SS.token)
 window.onmessage = e => {
   if (e.origin !== 'https://cn.aauth.link') return
-  auth(e.data?.token || '')
+  SS.token = e.data?.token || ''
+  auth(SS.token)
 }
 watch(() => state.user, v => {
   if (v.id) goto('')
