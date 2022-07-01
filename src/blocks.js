@@ -2,7 +2,8 @@ import { defineAsyncComponent } from 'vue'
 
 const volumeIndex = {
   List: () => import('./volumes/List.vue'),
-  Post: () => import('./volumes/Post.vue')
+  Post: () => import('./volumes/Post.vue'),
+  Ten: () => import('./volumes/Ten.vue')
 }
 
 const surfaceIndex = {
