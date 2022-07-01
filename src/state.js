@@ -30,7 +30,8 @@ ws.onmessage = e => {
     for (const id in A[1]) state.children[id] = A[1][id]
   }
   if (N === 'block.removeChildren' && state.block._id == A[0]) {
-    for (const id in A[1]) delete state.children[id]
+    console.log(A[1])
+    delete state.children[A[1]]
   }
 }
 
