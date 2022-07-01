@@ -25,7 +25,7 @@ function post (draft) {
     <div class="w-full shadow p-4 bg-white rounded">
       <p class="text-xs text-gray-500 flex items-center my-1">
         <arrow-left-icon v-if="typeof state.block.parent !== 'undefined'" class="all-transition pl-2 pr-0 mr-2 w-7 text-grey-500 cursor-pointer hover:pr-2 hover:pl-0" @click="goto(state.block.parent)" />
-        {{ parseDate(state.block.time) }}&nbsp;{{ (state.block.volume.author || '') }}
+        {{ (state.block.volume.author || '') }}&nbsp;/&nbsp;{{ parseDate(state.block.time) }}
       </p>
       <div class="font-bold text-xl mx-2">{{ state.block.volume.title }}</div>
       <hr>
