@@ -1,29 +1,19 @@
-# template-web
+# aboard-web
 
-Vite + Vue 3 + VueRouter 4 + TailwindCSS + Heroicons
+Aboard is a board, not abroad.
 
-CDN Library: axios + SweetAlert2 + NProgress
+## Block Render
 
-## Get Started
+All blocks are indexed in the file `/src/blocks.js`
 
-Click **Use Template** or this [link](https://github.com/yzITI/template-web/generate).
+The volume will be automatically rendered in the `/src/views/Home.vue`, while the surfaces block should be rendered in the volume block.
 
-Change project name in  `package.json` and `index.html`
-```
-"name": "project-name"
+Guided by `state.js`
 
-<!-- you may change lang as well -->
-<title>Your Title</title>
-```
+- `Home.vue` decides which volume to render
+- volume decides how to render itself (obviously)
+- volume decides which surfaces to render
 
-Install dependency
+## Navigation
 
-```
-npm i
-```
-
-Run dev server
-
-```
-npm run dev
-```
+There is a `goto(_id)` function in `/src/state.js`, it will automatically trigger block and children update and automatically render the volume block.
