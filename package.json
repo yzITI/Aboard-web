@@ -11,7 +11,6 @@
     "micromark": "^3.0.10",
     "micromark-extension-math": "^2.0.2",
     "vue": "^3.2.31",
-    "vue-router": "^4.0.14",
     "vue-infinite-loading": "^3.0.0-alpha.0-0"
   },
   "devDependencies": {

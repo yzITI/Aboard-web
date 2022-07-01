@@ -21,7 +21,7 @@ ws.onmessage = e => {
   const data = JSON.parse(e.data), N = data.N, A = data.A || []
   if (N === 'auth') return state.user = A[0]
   if (N === 'block.error') {
-    console.log(A)
+    console.log('block.error', A)
   }
   if (N === 'block.one' && state.block._id == A[0]._id) {
     state.block = A[0]
