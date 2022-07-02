@@ -25,8 +25,10 @@ function post () {
       </div>
       <input v-if="!props.comment" v-model="draft.title" class="block w-full p-2 font-bold" placeholder="Title">
       <hr>
-      <markdown class="overflow-auto p-2 h-64 bg-blue-50" v-if="showPreview" :content="draft.content" />
-      <textarea v-else v-model="draft.content" class="block w-full p-2" placeholder="Write something" rows="10" />
+      <div v-if="showPreview" class="overflow-auto w-full p-2 h-96 bg-blue-50">
+        <markdown :content="draft.content" />
+      </div>
+      <textarea v-else v-model="draft.content" class="block w-full p-2" placeholder="Write something" rows="15" />
       <hr>
       <div class="flex items-center justify-between p-2">
         <button class="py-1 px-3 rounded text-white font-bold" :class="postReady ? 'bg-blue-500' : 'bg-gray-500'" @click="post">Post</button>
