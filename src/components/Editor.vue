@@ -20,18 +20,18 @@ function post () {
   <transition name="fade" mode="out-in">
     <div v-if="showWrite" class="all-transition rounded-lg fixed z-10 bottom-0 sm:bottom-4 sm:right-4 border bg-white sm:shadow-md overflow-hidden w-full sm:w-2/3 lg:w-1/2"><!-- write window -->
       <div class="flex items-center justify-between bg-gray-800 text-white font-bold px-4 py-2">
-        <h3>New Post</h3>
+        <h3>编辑发布</h3>
         <x-icon class="w-6 cursor-pointer" @click="showWrite = false" />
       </div>
-      <input v-if="!props.comment" v-model="draft.title" class="block w-full p-2 font-bold" placeholder="Title">
+      <input v-if="!props.comment" v-model="draft.title" class="block w-full p-2 font-bold" placeholder="标题">
       <hr>
       <div v-if="showPreview" class="overflow-auto w-full p-2 h-96 bg-blue-50">
         <markdown :content="draft.content" />
       </div>
-      <textarea v-else v-model="draft.content" class="block w-full p-2" placeholder="Write something" rows="15" />
+      <textarea v-else v-model="draft.content" class="block w-full p-2" placeholder="写点什么吧！（支持markdown语法）" rows="15" />
       <hr>
       <div class="flex items-center justify-between p-2">
-        <button class="py-1 px-3 rounded text-white font-bold" :class="postReady ? 'bg-blue-500' : 'bg-gray-500'" @click="post">Post</button>
+        <button class="py-1 px-3 rounded text-white font-bold" :class="postReady ? 'bg-blue-500' : 'bg-gray-500'" @click="post">提交发布</button>
         <div class="flex items-center">
           <trash-icon class="w-6 mr-2 cursor-pointer text-gray-500" @click="draft = { title: '', content: '' }" />
           <eye-icon class="w-6 all-transition cursor-pointer" :class="showPreview ? 'text-blue-500' : 'text-gray-500'" @click="showPreview = !showPreview" />

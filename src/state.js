@@ -9,6 +9,7 @@ export const state = reactive({
 export default state
 
 const ws = new WebSocket(`wss://s.yzzx.org/aboard`)
+ws.onerror = () => { Swal.fire('网络错误', '', 'error') }
 ws.json = (N, ...A) => ws.send(JSON.stringify({ N, A }))
 
 export function auth (jwt, onauth) {
@@ -17,11 +18,19 @@ export function auth (jwt, onauth) {
   ws.onopen = sendAuth
 }
 
+export const send = ws.json
+
+export function goto (_id) {
+  state.block = { _id }
+  state.children = {}
+  send('block.get', _id)
+}
+
 ws.onmessage = e => {
   const data = JSON.parse(e.data), N = data.N, A = data.A || []
   if (N === 'auth') return state.user = A[0]
-  if (N === 'block.error') {
-    console.log('block.error', A)
+  if (N === 'block.error' && state.block._id == A[0]) {
+    goto(state.block.parent)
   }
   if (N === 'block.one' && state.block._id == A[0]._id) {
     state.block = A[0]
@@ -30,15 +39,6 @@ ws.onmessage = e => {
     for (const id in A[1]) state.children[id] = A[1][id]
   }
   if (N === 'block.removeChildren' && state.block._id == A[0]) {
-    console.log(A[1])
     delete state.children[A[1]]
   }
-}
-
-export const send = ws.json
-
-export function goto (_id) {
-  state.block = { _id }
-  state.children = {}
-  send('block.get', _id)
 }

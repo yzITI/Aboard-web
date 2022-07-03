@@ -9,7 +9,6 @@
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
     "micromark": "^3.0.10",
-    "moment": "^2.29.3",
     "vue": "^3.2.31",
     "vue-infinite-loading": "^3.0.0-alpha.0-0"
   },

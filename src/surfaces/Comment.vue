@@ -1,5 +1,4 @@
 <script setup>
-import moment from 'moment'
 import { TrashIcon } from '@heroicons/vue/outline'
 import { state, send } from '../state.js'
 import Markdown from '../components/Markdown.vue'
@@ -17,7 +16,7 @@ async function del () {
 
 <template>
   <div class="py-2">
-    <p class="text-xs text-gray-500">{{ (B.surface.author || '') }}&nbsp;/&nbsp;{{ parseDate(B.time) }}<trash-icon v-if="B.user === state.user.id" class="w-4 inline ml-2 text-red-500 cursor-pointer" @click="del" /></p>
+    <p class="text-xs text-gray-500">{{ (B.surface.author || '') }}&nbsp;/&nbsp;{{ parseDate(B.time) }}<trash-icon v-if="B.user === state.user.id" class="w-4 inline ml-2 text-red-500 cursor-pointer" @click.stop="del" /></p>
     <markdown :content="B.surface.content" />
   </div>
 </template>

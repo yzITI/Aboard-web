@@ -1,5 +1,4 @@
 <script setup>
-import moment from 'moment'
 import { TrashIcon } from '@heroicons/vue/outline'
 import { state, goto, send } from '../state.js'
 const { _id } = defineProps(['_id'])
@@ -17,6 +16,6 @@ async function del () {
 <template>
   <div class="w-11/12 sm:w-5/6 rounded-lg bg-white m-2 cursor-pointer p-2 all-transition shadow hover:shadow-md" @click="goto(_id)">
     <h1 class="mx-2 font-bold">{{ short(B.surface.title) }}</h1>
-    <p class="px-2 text-xs text-gray-500">{{ (B.surface.author || '') }}&nbsp;/&nbsp;{{ parseDate(B.time) }}<trash-icon v-if="B.user === state.user.id" class="w-4 inline ml-2 text-red-500 cursor-pointer" @click="del" /></p>
+    <p class="px-2 text-xs text-gray-500">{{ (B.surface.author || '') }}&nbsp;/&nbsp;{{ parseDate(B.time) }}<trash-icon v-if="B.user === state.user.id" class="w-4 inline ml-2 text-red-500 cursor-pointer" @click.stop="del" /></p>
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup>
-import moment from 'moment'
 import { state, goto, send } from '../state.js'
 import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { surfaces } from '../blocks.js'
@@ -27,9 +26,9 @@ function post (draft) {
         <arrow-left-icon v-if="typeof state.block.parent !== 'undefined'" class="all-transition pl-2 pr-0 mr-2 w-7 text-grey-500 cursor-pointer hover:pr-2 hover:pl-0" @click="goto(state.block.parent)" />
         {{ (state.block.volume.author || '') }}&nbsp;/&nbsp;{{ parseDate(state.block.time) }}
       </p>
-      <div class="font-bold text-xl mx-2">{{ state.block.volume.title }}</div>
+      <div class="font-bold text-xl mx-2 my-2">{{ state.block.volume.title }}</div>
       <hr>
-      <markdown class="p-2 pb-10" :content="state.block.volume.content" />
+      <markdown class="p-2" :content="state.block.volume.content" />
     </div>
     <div v-if="children.length" class="w-full shadow px-4 my-6 bg-white rounded">
       <template v-for="(_id, i) in children" :key="_id">
