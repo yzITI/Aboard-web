@@ -8,7 +8,7 @@ export const state = reactive({
 
 export default state
 
-const ws = new WebSocket(`ws://localhost:8080`)
+const ws = new WebSocket(`wss://s.yzzx.org/aboard`)
 ws.json = (N, ...A) => ws.send(JSON.stringify({ N, A }))
 
 export function auth (jwt, onauth) {
