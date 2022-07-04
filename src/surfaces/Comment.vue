@@ -15,7 +15,7 @@ async function del () {
 </script>
 
 <template>
-  <div class="py-2">
+  <div class="py-2 w-full">
     <p class="text-xs text-gray-500">{{ (B.surface.author || '') }}&nbsp;/&nbsp;{{ parseDate(B.time) }}<trash-icon v-if="B.user === state.user.id" class="w-4 inline ml-2 text-red-500 cursor-pointer" @click.stop="del" /></p>
     <markdown :content="B.surface.content" />
   </div>

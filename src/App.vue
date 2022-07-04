@@ -3,6 +3,7 @@ import loading from './assets/loading.svg'
 import { watch } from 'vue'
 import { state, auth, goto } from './state.js'
 import { volumes } from './blocks.js'
+import Editor from './components/Editor.vue'
 
 // auth
 const SS = window.sessionStorage
@@ -19,10 +20,13 @@ watch(() => state.user, v => {
 })
 
 let showVolume = $computed(() => state.block.volume && volumes[state.block.volume.type])
+
+// test
+window.editor = () => { state.editor.show = true }
 </script>
 
 <template>
-  <component v-if="showVolume" :is="volumes[state.block.volume.type]"></component>
+  <component v-if="showVolume" :is="volumes[state.block.volume.type].component"></component>
   <transition name="fade">
     <div v-if="!showVolume" class="fixed top-0 left-0 z-50 w-screen h-screen flex flex-col items-center justify-center">
       <img v-if="state.user.id" class="w-64" :src="loading">
@@ -33,4 +37,5 @@ let showVolume = $computed(() => state.block.volume && volumes[state.block.volum
       </div>
     </div>
   </transition>
+  <editor></editor>
 </template>

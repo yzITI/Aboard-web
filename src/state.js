@@ -3,7 +3,10 @@ import { reactive } from 'vue'
 export const state = reactive({
   user: {},
   block: {},
-  children: {}
+  children: {},
+  // for editor
+  draft: {},
+  editor: {}
 })
 
 export default state
@@ -11,6 +14,7 @@ export default state
 const ws = new WebSocket(`wss://s.yzzx.org/aboard`)
 ws.onerror = () => { Swal.fire('网络错误', '', 'error') }
 ws.json = (N, ...A) => ws.send(JSON.stringify({ N, A }))
+ws.onclose = () => { console.log('close') }
 
 export function auth (jwt, onauth) {
   const sendAuth = () => ws.json('auth', jwt)
@@ -42,3 +46,7 @@ ws.onmessage = e => {
     delete state.children[A[1]]
   }
 }
+
+setInterval(() => {
+  send('heartbeat')
+}, 5e3)

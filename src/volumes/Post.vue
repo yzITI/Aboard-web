@@ -2,7 +2,7 @@
 import { state, goto, send } from '../state.js'
 import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { surfaces } from '../blocks.js'
-import Editor from '../components/Editor.vue'
+import TextEditor from '../components/TextEditor.vue'
 import Markdown from '../components/Markdown.vue'
 
 const parseDate = t => moment(t).fromNow()
@@ -33,9 +33,9 @@ function post (draft) {
     <div v-if="children.length" class="w-full shadow px-4 my-6 bg-white rounded">
       <template v-for="(_id, i) in children" :key="_id">
         <hr v-if="i">
-        <component :_id="_id" :is="surfaces['Comment']"></component>
+        <component :_id="_id" :is="surfaces['Comment'].component"></component>
       </template>
     </div>
-    <editor comment="1" @post="post" />
+    <text-editor comment="1" @post="post" />
   </div>
 </template>

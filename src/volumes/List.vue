@@ -2,7 +2,7 @@
 import { state, goto, send } from '../state.js'
 import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { surfaces } from '../blocks.js'
-import Editor from '../components/Editor.vue'
+import TextEditor from '../components/TextEditor.vue'
 
 function post (draft) {
   send('block.put', {
@@ -24,7 +24,9 @@ let children = $computed(() => {
       <arrow-left-icon v-if="typeof state.block.parent !== 'undefined'" class="all-transition pl-2 pr-0 mx-2 w-7 text-grey-500 cursor-pointer hover:pr-2 hover:pl-0" @click="goto(state.block.parent)" />
       <h1 class="text-xl px-4 py-2">{{ state.block.volume.title }}</h1>
     </div>
-    <component v-for="_id in children" :key="_id" :_id="_id" :is="surfaces['ListItem']"></component>
-    <editor @post="post" />
+    <div class="w-11/12 sm:w-5/6 flex flex-col items-center">
+      <component v-for="_id in children" :key="_id" :_id="_id" :is="surfaces[state.children[_id].surface.type].component"></component>
+    </div>
+    <text-editor @post="post" />
   </div>  
 </template>
