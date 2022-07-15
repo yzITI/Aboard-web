@@ -5,19 +5,22 @@ import { XIcon } from '@heroicons/vue/outline'
 import { surfaces, volumes } from '../blocks.js'
 
 const surfaceList = [], volumeList = []
-for (const k in surfaces) {
-  if (surfaces[k].editor) surfaceList.push(k)
-}
-for (const k in volumes) {
-  if (volumes[k].editor) volumeList.push(k)
-}
+for (const k in surfaces) surfaceList.push(k)
+for (const k in volumes) volumeList.push(k)
 
 function init () {
   state.draft = { surface: {}, volume: {} }
 }
 init()
 
-let ready = $computed(() => state.editor.surfaceReady && (surfaces[state.draft.surface.type]?.leaf || state.editor.volumeReady))
+let ready = $computed(() => {
+  const sType = state.draft.surface.type, vType = state.draft.volume.type
+  if (!sType || !surfaces[sType]) return false
+  if (surfaces[sType].editor && !state.editor.surfaceReady) return false
+  if (!surfaces[sType].leaf && (!vType || !volumes[vType])) return false
+  if (volumes[vType].editor && !state.editor.volumeReady) return false
+  return true
+})
 
 watchEffect(() => {
   if (!surfaces[state.draft.surface.type]) state.editor.surfaceReady = false
@@ -52,7 +55,7 @@ async function submit () {
           <option v-for="k in surfaceList" :key="k" :value="k">{{ surfaces[k].name }}</option>
         </select>
       </div>
-      <div class="m-2" v-if="surfaces[state.draft.surface.type]">
+      <div class="m-2" v-if="surfaces[state.draft.surface.type]?.editor">
         <component :is="surfaces[state.draft.surface.type].editor"></component>
       </div>
     </div>
@@ -64,7 +67,7 @@ async function submit () {
           <option v-for="k in volumeList" :key="k" :value="k">{{ volumes[k].name }}</option>
         </select>
       </div>
-      <div class="m-2" v-if="volumes[state.draft.volume.type]">
+      <div class="m-2" v-if="volumes[state.draft.volume.type]?.editor">
         <component :is="volumes[state.draft.volume.type].editor"></component>
       </div>
     </div>
